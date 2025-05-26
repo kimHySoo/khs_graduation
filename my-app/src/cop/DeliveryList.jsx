@@ -18,7 +18,11 @@ export default function DeliveryList() {
   const start = (page - 1) * ITEMS_PER_PAGE;
   const pageData = data.slice(start, start + ITEMS_PER_PAGE);
   const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
-
+  
+  const handleRowClick = (item) => {
+    navigate(`/employee/${item.request_number}`, { state: { item } });
+  };
+  
   return (
     <div className="delivery-container">
       {/* --- 상단 로고 + 탭 --- */}
