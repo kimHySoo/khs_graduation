@@ -1,0 +1,104 @@
+.delivery-container {
+  padding: 20px 40px;
+  box-sizing: border-box;
+  background: #fff;
+  font-family: 'Pretendard Variable', sans-serif;
+}
+
+/* Header */
+/* ——— 기존 delivery-container, reset 등 그대로 두시고 아래만 추가/수정 ——— */
+
+/* 1) header 를 풀 너비 nav bar 로 */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e0e0e0;
+  box-sizing: border-box;
+}
+.header .logo {
+  margin-right: -20px;
+}
+
+.header .company {
+  margin-left: -20px;
+}
+
+/* 2) nav-tabs 를 우측으로 밀기 */
+.header .nav-tabs {
+  margin-left: auto; 
+}
+
+/* 3) 탭 스타일 (기존 그대로 + 클릭 영역 확보) */
+.header .nav-tabs span {
+  color: #6a7581;
+  cursor: pointer;
+  padding: 8px 12px;
+}
+.header .nav-tabs .active-tab {
+  color: #000;
+  font-weight: 700;
+  border-bottom: 2px solid #000;
+}
+
+
+/* Page Title */
+.page-title {
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+/* Table Wrapper */
+.table-wrapper {
+  overflow-x: auto;
+  width: 100%;
+}
+
+/* Table */
+.delivery-table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 1400px;
+  table-layout: fixed;
+}
+.delivery-table th,
+.delivery-table td {
+  padding: 12px;
+  border: 1px solid #d8dbdf;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  text-align: center;
+}
+.delivery-table th {
+  background: #f8f8f8;
+  font-weight: 600;
+  color: #6a7581;
+}
+.delivery-table td {
+  background: #fff;
+  color: #171A1C;
+}
+
+/* Pagination */
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  gap: 8px;
+}
+.page-number {
+  padding: 6px 12px;
+  border: none;
+  background: #eee;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.page-number.active {
+  background: #0759e6;
+  color: #fff;
+  font-weight: bold;
+}

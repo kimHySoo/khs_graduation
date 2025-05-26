@@ -1,0 +1,165 @@
+.delivery-detail-page {
+  width: 1440px;
+  min-height: 1024px;
+  margin: 0 auto;
+  background: #FFFFFF;
+  font-family: 'Pretendard Variable', sans-serif;
+  padding: 40px 60px;
+}
+
+/* ===== Header ===== */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+}
+
+.company {
+  width: 200px;
+  height: auto;
+}
+
+.nav-tabs {
+  display: flex;
+  gap: 24px;
+  margin-left: 40px;
+  font-size: 20px;
+}
+
+.nav-tabs span {
+  color: #6A7581;
+  cursor: pointer;
+}
+
+.nav-tabs .active {
+  font-weight: 700;
+  color: #000000;
+}
+
+/* ===== Order Number ===== */
+.order-number {
+  font-size: 28px;
+  color: #9A9A9A;
+  margin: 40px 0 20px;
+}
+
+/* ===== Delivery Steps ===== */
+.delivery-steps {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 40px;
+  margin-bottom: 40px;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #6A7581;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.step img {
+  width: 77px;
+  height: 77px;
+  margin-bottom: 8px;
+}
+
+.step.active {
+  color: #000000;
+  font-weight: 700;
+}
+
+/* ===== Detail Card ===== */
+.detail-card {
+  border: 1px solid #D8DBDF;
+  border-radius: 20px;
+  padding: 40px;
+  background-color: #FFFFFF;
+  margin-bottom: 40px;
+}
+
+.detail-section {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #D8DBDF;
+}
+
+.detail-section:last-child {
+  border-bottom: none;
+}
+
+.detail-section label {
+  font-weight: 700;
+  font-size: 20px;
+  color: #000000;
+}
+
+.detail-section span {
+  font-weight: 400;
+  font-size: 20px;
+  color: #4E575F;
+}
+
+/* ===== People Info ===== */
+.people-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;
+}
+
+.person {
+  width: 30%;
+}
+
+.person h3 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 8px;
+}
+
+.person strong {
+  display: block;
+  font-size: 32px;
+  font-weight: 700;
+  color: #000000;
+}
+
+.person p {
+  font-size: 20px;
+  color: #4E575F;
+  margin: 4px 0;
+}
+
+/* ===== Upload Box ===== */
+.upload-box {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.upload-placeholder {
+  width: 164px;
+  height: 164px;
+  background: #F5F5F5;
+  border: 3px dashed #B0B0B0;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-plus {
+  font-size: 35px;
+  color: #B0B0B0;
+}

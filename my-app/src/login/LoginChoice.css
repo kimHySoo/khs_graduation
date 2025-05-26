@@ -1,0 +1,84 @@
+/* 1) 브라우저 기본 여백 제거 & 전체 높이 확보 */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+/* 2) container를 뷰포트 중앙에 배치 */
+.container {
+  display: flex;
+  flex-direction: column;    /* 위→아래 쌓기 */
+  justify-content: center;   /* 세로 중앙 정렬 */
+  align-items: center;       /* 가로 중앙 정렬 */
+  width: 100vw;              /* 화면 전체 너비 */
+  height: 100vh;             /* 화면 전체 높이 */
+}
+
+/* 3) 로고 그룹 */
+.container .logo-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40px;       /* 버튼 그룹과 간격 */
+}
+
+/* 4) 로고 */
+.container .logo-group .logo {
+  display: block;            /* inline 이미지 여백 제거 */
+  width: 80vw;               /* 화면 너비의 80% */
+  max-width: 300px;          /* 최대 300px */
+  height: auto;
+  margin-bottom: -25px;       /* 슬로건과 16px 간격 */
+}
+
+/* 5) 슬로건 */
+.container .logo-group .slogan {
+  font-family: 'Pretendard Variable', sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 130%;
+  color: #000000;
+  text-align: center;
+}
+
+/* 6) 버튼 그룹 */
+.container .button-group {
+  display: flex;
+  gap: 20px;                 /* 버튼 사이 20px */
+}
+
+/* 7) 공통 버튼 스타일 */
+.container .button-group .login-button {
+  width: 280px;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Pretendard Variable', sans-serif;
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 36px;
+  border-radius: 20px;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* 8) 기업 로그인 */
+.container .button-group .login-button.corporate {
+  background: #000000;
+  color: #FFFFFF;
+  border: none;
+}
+
+/* 9) 사용자 로그인 */
+.container .button-group .login-button.user {
+  background: #FFFFFF;
+  color: #000000;
+  border: 1px solid #D9D9D9;
+  box-shadow: 0 4px 4px rgba(0,0,0,0.25);
+}
