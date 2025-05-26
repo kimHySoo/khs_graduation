@@ -21,7 +21,9 @@ const LoginChoice = () => {
           className="login-button corporate"
           onClick={() => navigate('/cop/login')}
         >기업 로그인</div>
-        <div className="login-button user">사용자 로그인</div>
+        <div className="login-button user"
+          onClick={() => navigate('/cus/login')}
+        >사용자 로그인</div>
       </div>
     </div>
   );

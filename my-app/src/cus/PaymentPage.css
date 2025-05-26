@@ -1,0 +1,173 @@
+/* 공통 스타일 */
+.payment-page {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 40px;
+  font-family: 'Pretendard Variable', sans-serif;
+  background: #ffffff;
+}
+
+/* 헤더 (기존 header 기준으로 적용) */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e0e0e0;
+  box-sizing: border-box;
+}
+
+.header .logo {
+  margin-right: -20px;
+  width: 50px;
+  height: 51px;
+}
+
+.header .company {
+  margin-left: -20px;
+  width: 195px;
+  height: 60px;
+}
+
+/* 제목 */
+.payment-title {
+  font-size: 46px;
+  font-weight: 700;
+  color: #171a1c;
+  margin-bottom: 40px;
+}
+
+/* 그리드 레이아웃 */
+.payment-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 48px;
+}
+
+.form-box {
+  border: 1px solid #d8dbdf;
+  border-radius: 12px;
+  padding: 24px 32px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.form-warning {
+  color: #ea4335;
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+
+.form-box label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 16px;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+.form-input {
+  padding: 12px 16px;
+  font-size: 16px;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+/* 결제 및 접수 영역 - 폼박스 내부로 이동용 */
+.payment-footer-area {
+  margin-top: 20px;
+  padding-top: 24px;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.footer-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: #222;
+  text-align: center;
+}
+
+.payment-methods {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.pay-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border: 1px solid #dfe7eb;
+  border-radius: 10px;
+  background: #ffffff;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: #89949b;
+}
+
+.pay-logo {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toss-symbol,
+.kakao-symbol,
+.naver-symbol {
+  width: 13px;
+  height: 13px;
+}
+
+.payment-total {
+  text-align: center;
+}
+
+.total-label {
+  font-size: 18px;
+  font-weight: 600;
+  color: #000;
+}
+
+.total-amount {
+  font-size: 32px;
+  font-weight: 700;
+  color: #000;
+}
+
+.submit-button {
+  background: #000;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 700;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+}
+
+.submit-button:hover {
+  background: #222;
+}

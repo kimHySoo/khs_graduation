@@ -1,3 +1,6 @@
+/* DeliveryDetailPage.css */
+
+/* ===== Page Container ===== */
 .delivery-detail-page {
   width: 1440px;
   min-height: 1024px;
@@ -5,6 +8,7 @@
   background: #FFFFFF;
   font-family: 'Pretendard Variable', sans-serif;
   padding: 40px 60px;
+  box-sizing: border-box;
 }
 
 /* ===== Header ===== */
@@ -14,38 +18,33 @@
   gap: 16px;
   margin-bottom: 30px;
 }
-
-.logo {
+.header .logo {
   width: 50px;
   height: 50px;
 }
-
-.company {
+.header .company {
   width: 200px;
   height: auto;
 }
-
-.nav-tabs {
+.header .nav-tabs {
   display: flex;
   gap: 24px;
   margin-left: 40px;
   font-size: 20px;
 }
-
-.nav-tabs span {
-  color: #6A7581;
+.header .nav-tabs span {
+  color: #000000;
   cursor: pointer;
 }
-
-.nav-tabs .active {
-  font-weight: 700;
+.header .nav-tabs .active {
   color: #000000;
+  font-weight: 700;
 }
 
 /* ===== Order Number ===== */
 .order-number {
   font-size: 28px;
-  color: #9A9A9A;
+  color: #000000;
   margin: 40px 0 20px;
 }
 
@@ -57,100 +56,88 @@
   padding: 0 40px;
   margin-bottom: 40px;
 }
-
-.step {
+.delivery-steps .step {
   display: flex;
   flex-direction: column;
   align-items: center;
   color: #6A7581;
   font-weight: 600;
   font-size: 16px;
+  
 }
-
-.step img {
+.delivery-steps .step img {
   width: 77px;
   height: 77px;
   margin-bottom: 8px;
 }
-
-.step.active {
+.delivery-steps .step.active {
   color: #000000;
   font-weight: 700;
+}
+.delivery-steps .step.active img {
+  filter: brightness(0) saturate(100%);
 }
 
 /* ===== Detail Card ===== */
 .detail-card {
+  display: flex;
+  gap: 40px;
+  padding: 40px;
+  background: #FFFFFF;
   border: 1px solid #D8DBDF;
   border-radius: 20px;
-  padding: 40px;
-  background-color: #FFFFFF;
-  margin-bottom: 40px;
+  box-sizing: border-box;
 }
 
-.detail-section {
+/* -- Left Column -- */
+.detail-card .detail-left {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;  /* 수직 중앙 정렬 */
+}
+.detail-card .info-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.detail-card hr {
+  border: none;
+  border-top: 1px solid #D8DBDF;
+  margin: 24px 0;
+}
+.detail-card .detail-section {
   display: flex;
   justify-content: space-between;
-  padding: 12px 0;
-  border-bottom: 1px solid #D8DBDF;
 }
-
-.detail-section:last-child {
-  border-bottom: none;
-}
-
-.detail-section label {
+.detail-card .detail-section label {
   font-weight: 700;
   font-size: 20px;
   color: #000000;
 }
-
-.detail-section span {
+.detail-card .detail-section span {
   font-weight: 400;
   font-size: 20px;
   color: #4E575F;
 }
 
-/* ===== People Info ===== */
-.people-info {
+/* -- Right Column -- */
+.detail-card .detail-right {
+  flex: 1;
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 40px;
+  flex-direction: column;
+  align-items: center;  /* 변경: 왼쪽 정렬 */
+  gap: 24px;
 }
 
-.person {
-  width: 30%;
-}
-
-.person h3 {
-  font-size: 22px;
-  font-weight: 700;
-  color: #000000;
-  margin-bottom: 8px;
-}
-
-.person strong {
-  display: block;
-  font-size: 32px;
-  font-weight: 700;
-  color: #000000;
-}
-
-.person p {
-  font-size: 20px;
-  color: #4E575F;
-  margin: 4px 0;
-}
-
-/* ===== Upload Box ===== */
-.upload-box {
-  display: flex;
-  justify-content: center;
-  margin-top: 40px;
-}
-
-.upload-placeholder {
+/* Upload Box */
+.detail-card .upload-box {
   width: 164px;
   height: 164px;
+}
+.detail-card .upload-placeholder {
+  width: 100%;
+  height: 100%;
   background: #F5F5F5;
   border: 3px dashed #B0B0B0;
   border-radius: 15px;
@@ -158,8 +145,59 @@
   align-items: center;
   justify-content: center;
 }
-
-.icon-plus {
+.detail-card .icon-plus {
   font-size: 35px;
   color: #B0B0B0;
+}
+
+/* Person Info */
+.detail-card .person-info {
+  text-align: center;
+}
+.detail-card .person-info h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #888888;
+  margin-bottom: 8px;
+}
+.detail-card .person-info strong {
+  display: block;
+  font-size: 32px;
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 8px;
+}
+.detail-card .person-info p {
+  font-size: 20px;
+  color: #000000;
+  margin-bottom: 16px;
+}
+
+/* Sub-info (의뢰인, 인수인 등) */
+.detail-card .sub-info {
+  width: 100%;               /* 우측 칸 전체 폭 채우기 */
+  padding: 24px;             /* 내부 여백 확대 */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;    
+  background: #F9FAFB;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+.detail-card .sub-info > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.detail-card .sub-info .label {
+  flex: 0 0 140px;
+  font-weight: 600;
+  font-size: 18px;
+  color: #4E575F;
+}
+.detail-card .sub-info .value {
+  flex: 1;
+  font-size: 18px;
+  color: #4E575F;
 }

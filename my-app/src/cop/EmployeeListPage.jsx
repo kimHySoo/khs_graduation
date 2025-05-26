@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';;
+import React, { useEffect, useState } from 'react';
 import './EmployeeListPage.css';
 import { useNavigate } from 'react-router-dom';
 
 const ITEMS_PER_PAGE = 10;
 
-export default function DeliveryList() {
+export default function EmployeeListPage() {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
@@ -12,7 +12,8 @@ export default function DeliveryList() {
   useEffect(() => {
     fetch('/data/employeelist_data.json')
       .then(res => res.json())
-      .then(setData);
+      .then(setData)
+      .catch(err => console.error('데이터 불러오기 오류:', err));
   }, []);
 
   const start = (page - 1) * ITEMS_PER_PAGE;
@@ -21,14 +22,10 @@ export default function DeliveryList() {
 
   return (
     <div className="delivery-container">
-      {/* --- 상단 로고 + 탭 --- */}
+      {/* 상단 로고 및 탭 */}
       <div className="header">
-        <img
-          src="/images/icon/login_1.png"
-          alt="logo"
-          className="logo"
-        />
-        <img src="/images/icon/login_2.png" alt="company" className="company"/>
+        <img src="/images/icon/login_1.png" alt="logo" className="logo" />
+        <img src="/images/icon/login_2.png" alt="company" className="company" />
         <div className="nav-tabs">
           <span onClick={() => navigate('/cop/deliverylist')}>배송 접수 리스트</span>
           <span>내 배송 접수 리스트</span>
@@ -36,10 +33,20 @@ export default function DeliveryList() {
         </div>
       </div>
 
-      {/* --- 페이지 제목 --- */}
-      <h2 className="page-title">직원 리스트</h2>
+      {/* 제목 */}
+      <div className="page-header">
+        <h2 className="page-title">직원 리스트</h2>
 
-      {/* --- 테이블 --- */}
+        <div
+          className="register-button"
+          onClick={() => navigate('/cop/register')}
+        >
+          직원 등록
+        </div>
+      </div>
+
+
+      {/* 테이블 */}
       <div className="table-wrapper">
         <table className="delivery-table">
           <thead>
@@ -60,16 +67,16 @@ export default function DeliveryList() {
                 <td>{item.employee_type}</td>
                 <td>{item.name}</td>
                 <td>{item.birth_date}</td>
+                <td>{item.phone_number}</td>
                 <td>{item.address}</td>
                 <td>{item.hire_date}</td>
-                <td>{item.phone_number}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
 
-      {/* --- 페이지네이션 --- */}
+      {/* 페이지네이션 */}
       <div className="pagination">
         {Array.from({ length: totalPages }, (_, idx) => (
           <button

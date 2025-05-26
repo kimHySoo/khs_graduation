@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './DeliveryList.css';
+import './CusDeliveryList.css';
 import { useNavigate } from 'react-router-dom';
 
 const ITEMS_PER_PAGE = 10;
@@ -30,14 +30,17 @@ export default function DeliveryList() {
         <img src="/images/icon/login_1.png" alt="logo" className="logo" />
         <img src="/images/icon/login_2.png" alt="company" className="company"/>
         <div className="nav-tabs">
-          <span className="active-tab">배송 접수 리스트</span>
-          <span>내 배송 접수 리스트</span>
-          <span onClick={() => navigate('/cop/employeelist')}>직원 리스트</span>
+          <span className="active-tab">내 배송 접수 리스트</span>
         </div>
       </div>
 
-      {/* --- 페이지 제목 --- */}
-      <h2 className="page-title">배송 접수 리스트</h2>
+        {/* --- 페이지 제목 + 버튼 --- */}
+        <div className="page-header">
+        <h2 className="page-title">내 배송 접수 리스트</h2>
+        <button className="page-action-button" onClick={() => navigate('/cus/payment')}>
+            신규 의뢰
+        </button>
+        </div>
 
       {/* --- 테이블 --- */}
       <div className="table-wrapper">
