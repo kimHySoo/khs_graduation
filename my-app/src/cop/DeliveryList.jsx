@@ -31,7 +31,7 @@ export default function DeliveryList() {
         <img src="/images/icon/login_2.png" alt="company" className="company"/>
         <div className="nav-tabs">
           <span className="active-tab">배송 접수 리스트</span>
-          <span>내 배송 접수 리스트</span>
+          <span onClick={() => navigate('/cop/dashboard')}>대시 보드</span>
           <span onClick={() => navigate('/cop/employeelist')}>직원 리스트</span>
         </div>
       </div>

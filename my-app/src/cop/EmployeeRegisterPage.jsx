@@ -63,7 +63,7 @@ export default function EmployeeRegisterPage() {
         <img src="/images/icon/login_2.png" alt="company" className="company" />
         <div className="nav-tabs">
           <span onClick={() => navigate('/cop/deliverylist')}>배송 접수 리스트</span>
-          <span>내 배송 접수 리스트</span>
+          <span onClick={() => navigate('/cop/dashboard')}>대시 보드</span>
           <span className="active-tab">직원 리스트</span>
         </div>
       </div>

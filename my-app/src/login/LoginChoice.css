@@ -12,11 +12,11 @@ html, body {
 /* 2) container를 뷰포트 중앙에 배치 */
 .container {
   display: flex;
-  flex-direction: column;    /* 위→아래 쌓기 */
-  justify-content: center;   /* 세로 중앙 정렬 */
-  align-items: center;       /* 가로 중앙 정렬 */
-  width: 100vw;              /* 화면 전체 너비 */
-  height: 100vh;             /* 화면 전체 높이 */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
 }
 
 /* 3) 로고 그룹 */
@@ -24,16 +24,15 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 40px;       /* 버튼 그룹과 간격 */
+  margin-bottom: 40px;
 }
 
 /* 4) 로고 */
 .container .logo-group .logo {
-  display: block;            /* inline 이미지 여백 제거 */
-  width: 80vw;               /* 화면 너비의 80% */
-  max-width: 300px;          /* 최대 300px */
+  display: block;
+  max-width: 300px;
   height: auto;
-  margin-bottom: -25px;       /* 슬로건과 16px 간격 */
+  margin-bottom: -25px;
 }
 
 /* 5) 슬로건 */
@@ -49,7 +48,7 @@ html, body {
 /* 6) 버튼 그룹 */
 .container .button-group {
   display: flex;
-  gap: 20px;                 /* 버튼 사이 20px */
+  gap: 20px;
 }
 
 /* 7) 공통 버튼 스타일 */

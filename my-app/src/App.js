@@ -7,6 +7,7 @@ import EmployeeRegisterPage from './cop/EmployeeRegisterPage';
 import DeliveryList from './cop/DeliveryList';
 import DeliveryDetailPage from './cop/DeliveryDetailPage';
 import EmployeeListPage from './cop/EmployeeListPage';
+import DeliveryDashboard from './cop/DeliveryDashboard'
 
 import CusLoginForm from './cus/LoginForm';
 import CusRegisterForm from './cus/CustomerRegisterPage';
@@ -25,6 +26,7 @@ function App() {
         <Route path="/employee/:requestId" element={<DeliveryDetailPage />} />
         <Route path="/cop/detail" element={<DeliveryDetailPage />} />
         <Route path="/cop/employeelist" element={<EmployeeListPage />} />
+        <Route path="/cop/dashboard" element={<DeliveryDashboard />} />
         <Route path="/cus/login" element={<CusLoginForm />} />
         <Route path="/cus/register" element={<CusRegisterForm />} />
         <Route path="/cus/landing" element={<LandingPage />} />
