@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './DeliveryDetailPage.css';
+import './CusDeliveryDetailPage.css';
 import { useNavigate, useParams } from 'react-router-dom';
 
 export default function DeliveryDetailPage() {
@@ -22,7 +22,7 @@ export default function DeliveryDetailPage() {
   }
 
   return (
-    <div className="delivery-detail-page">
+    <div className="cus-delivery-detail-page">
       {/* 상단 네비게이션 */}
       <header className="header">
         <img
@@ -38,13 +38,8 @@ export default function DeliveryDetailPage() {
         <nav className="nav-tabs">
           <span
             className="active"
-            onClick={() => navigate('/cop/deliverylist')}
-          >
-            배송 접수 리스트
-          </span>
-          <span onClick={() => navigate('/cop/dashboard')}>대시 보드</span>
-          <span onClick={() => navigate('/cop/employeelist')}>
-            직원 리스트
+            onClick={() => navigate('/cus/deliverylist')}
+          >내 배송 접수 리스트
           </span>
         </nav>
       </header>
@@ -56,7 +51,7 @@ export default function DeliveryDetailPage() {
     <div className="delivery-steps">
         <div className={`step ${item.status === '배송 접수' ? 'active' : ''}`}>
             <img src="/icons/order-completed.svg" alt="배달 접수" />
-            <span>배송송 접수</span>
+            <span>배송 접수</span>
         </div>
         <div className="step-line" /> {/* 선 추가 */}
 

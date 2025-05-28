@@ -1,132 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled, { createGlobalStyle } from 'styled-components';
-
-const GlobalStyle = createGlobalStyle`
-  * {
-    font-family: 'Pretendard Variable', sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-`;
-
-const Page = styled.div`
-  position: relative;
-  width: 1440px;
-  min-height: 1024px;
-  margin: 0 auto;
-  background: #ffffff;
-`;
-
-const Header = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  width: 100%;
-  margin-bottom: 20px;
-  padding: 28px 48px 12px;
-  border-bottom: 1px solid #e0e0e0;
-`;
-
-const LogoImg = styled.img`
-  width: 50px;
-  height: 51px;
-  margin-right: -15px;
-`;
-
-const LogoText = styled.img`
-  width: 250px;
-  height: 60px;
-  margin-left: -15px;
-`;
-
-const Title = styled.h2`
-  position: absolute;
-  top: 137px;
-  left: 69px;
-  font-size: 28px;
-  font-weight: 700;
-  color: #171a1c;
-`;
-
-const Box = styled.div`
-  position: absolute;
-  top: 202px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 568px;
-  background: #ffffff;
-  border: 2px solid #d8dbdf;
-  border-radius: 20px;
-  padding: 72px 50px 100px;
-`;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-`;
-
-const InputGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-
-  label {
-    font-size: 18px;
-    font-weight: 600;
-    color: #2e3338;
-  }
-
-  input {
-    padding: 12px 16px;
-    font-size: 18px;
-    border: 1px solid #d8dbdf;
-    border-radius: 10px;
-    background: #ffffff;
-    color: #2e3338;
-  }
-`;
-
-const CheckboxGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-top: 10px;
-
-  label {
-    font-size: 16px;
-    color: #2e3338;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    user-select: none;
-
-    input[type='checkbox'] {
-      width: 18px;
-      height: 18px;
-      accent-color: #1a1a1a;
-    }
-  }
-`;
-
-const SubmitButton = styled.button`
-  margin-top: 30px;
-  padding: 14px 0;
-  font-size: 20px;
-  font-weight: 600;
-  background-color: #1a1a1a;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: background 0.2s;
-
-  &:hover {
-    background-color: #333333;
-  }
-`;
+import DaumPostcode from 'react-daum-postcode';
+import './CustomerRegisterPage.css';
 
 export default function CustomerRegisterPage() {
   const navigate = useNavigate();
@@ -138,6 +13,7 @@ export default function CustomerRegisterPage() {
     agreeAll: false,
     agreePrivacy: false,
   });
+  const [isAddressOpen, setIsAddressOpen] = useState(false); // 주소창 열림 여부
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -147,10 +23,18 @@ export default function CustomerRegisterPage() {
     }));
   };
 
+  const handleAddressComplete = (data) => {
+    setFormData((prev) => ({
+      ...prev,
+      address: data.address, // 도로명 주소 입력
+    }));
+    setIsAddressOpen(false);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!formData.agreeAll || !formData.agreePrivacy) {
-      alert('모든 약관에 동의해 주세요.');
+    if (!isFormValid) {
+      alert('모든 정보를 입력하고 약관에 동의해 주세요.');
       return;
     }
     console.log('회원가입 정보:', formData);
@@ -158,88 +42,115 @@ export default function CustomerRegisterPage() {
     navigate('/cus/login');
   };
 
+  const isFormValid =
+    formData.name.trim() !== '' &&
+    formData.phone.trim() !== '' &&
+    formData.birth.trim() !== '' &&
+    formData.address.trim() !== '' &&
+    formData.agreeAll &&
+    formData.agreePrivacy;
+
   return (
-    <>
-      <GlobalStyle />
-      <Page>
-        <Header>
-          <LogoImg src="/images/icon/login_1.png" alt="logo" />
-          <LogoText src="/images/icon/login_2.png" alt="text-logo" />
-        </Header>
+    <div className="register-page">
+      <div className="header">
+        <img src="/images/icon/login_1.png" alt="logo" className="logo" />
+        <img src="/images/icon/login_2.png" alt="company" className="company" />
+        <div className="nav-tabs">
+          <span className="active-tab" onClick={() => navigate('/cus/register')}>회원가입</span>
+          <span onClick={() => navigate('/cus/login')}>로그인</span>
+        </div>
+      </div>
 
-        <Title>회원 정보 등록</Title>
+      <h2 className="page-title">회원 정보 등록</h2>
 
-        <Box>
-          <Form onSubmit={handleSubmit}>
-            <InputGroup>
-              <label>이름</label>
-              <input
-                type="text"
-                name="name"
-                placeholder="예) 홍길동"
-                value={formData.name}
-                onChange={handleChange}
-              />
-            </InputGroup>
+      <div className="register-box">
+        <form className="register-form" onSubmit={handleSubmit}>
+          <div className="register-input-group">
+            <label>이름</label>
+            <input
+              type="text"
+              name="name"
+              placeholder="예) 홍길동"
+              value={formData.name}
+              onChange={handleChange}
+            />
+          </div>
 
-            <InputGroup>
-              <label>전화번호</label>
-              <input
-                type="text"
-                name="phone"
-                placeholder="예) 010-1234-1234"
-                value={formData.phone}
-                onChange={handleChange}
-              />
-            </InputGroup>
+          <div className="register-input-group">
+            <label>전화번호</label>
+            <input
+              type="text"
+              name="phone"
+              placeholder="예) 010-1234-1234"
+              value={formData.phone}
+              onChange={handleChange}
+            />
+          </div>
 
-            <InputGroup>
-              <label>생년월일</label>
-              <input
-                type="text"
-                name="birth"
-                placeholder="예) 2000-01-01"
-                value={formData.birth}
-                onChange={handleChange}
-              />
-            </InputGroup>
+          <div className="register-input-group">
+            <label>생년월일</label>
+            <input
+              type="text"
+              name="birth"
+              placeholder="예) 2000-01-01"
+              value={formData.birth}
+              onChange={handleChange}
+            />
+          </div>
 
-            <InputGroup>
-              <label>주소</label>
+          <div className="register-input-group">
+            <label>주소</label>
+            <div style={{ display: 'flex', gap: '10px' }}>
               <input
                 type="text"
                 name="address"
                 placeholder="예) 경기도 용인시 모현읍 외대로 81"
                 value={formData.address}
                 onChange={handleChange}
+                readOnly
+                style={{ flex: 1 }}
               />
-            </InputGroup>
+              <button type="button" onClick={() => setIsAddressOpen(true)}>
+                주소 찾기
+              </button>
+            </div>
+            {isAddressOpen && (
+              <div style={{ position: 'absolute', zIndex: 1000, marginTop: '10px' }}>
+                <DaumPostcode onComplete={handleAddressComplete} />
+              </div>
+            )}
+          </div>
 
-            <CheckboxGroup>
-              <label>
-                <input
-                  type="checkbox"
-                  name="agreeAll"
-                  checked={formData.agreeAll}
-                  onChange={handleChange}
-                />
-                필수 약관 전체 동의
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  name="agreePrivacy"
-                  checked={formData.agreePrivacy}
-                  onChange={handleChange}
-                />
-                개인정보 수집 · 이용 동의
-              </label>
-            </CheckboxGroup>
+          <div className="register-checkbox-group">
+            <label>
+              <input
+                type="checkbox"
+                name="agreeAll"
+                checked={formData.agreeAll}
+                onChange={handleChange}
+              />
+              필수 약관 전체 동의
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                name="agreePrivacy"
+                checked={formData.agreePrivacy}
+                onChange={handleChange}
+              />
+              개인정보 수집 · 이용 동의
+            </label>
+          </div>
 
-            <SubmitButton type="submit">회원가입</SubmitButton>
-          </Form>
-        </Box>
-      </Page>
-    </>
+          <button
+            type="submit"
+            className="register-submit-button"
+            disabled={!isFormValid}
+          >
+            회원가입
+          </button>
+        </form>
+      </div>
+    </div>
   );
 }

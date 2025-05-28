@@ -1,68 +1,56 @@
-/* 전체 컨테이너 */
-.delivery-container {
+.cus-delivery-container {
   padding: 20px 40px;
   box-sizing: border-box;
   background: #fff;
   font-family: 'Pretendard Variable', sans-serif;
 }
 
-/* Header: 상단 로고 + 탭 */
+/* Header */
 .header {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  width: 100%;
   margin-bottom: 20px;
   padding-bottom: 12px;
   border-bottom: 1px solid #e0e0e0;
-  box-sizing: border-box;
 }
-
-.header .logo {
+.logo {
   margin-right: -20px;
   width: 50px;
   height: 51px;
 }
-
-.header .company {
+.company {
   margin-left: -20px;
   width: 195px;
   height: 60px;
 }
-
-.header .nav-tabs {
+.nav-tabs {
   margin-left: auto;
 }
-
-.header .nav-tabs span {
+.nav-tabs span {
   color: #6a7581;
   cursor: pointer;
   padding: 8px 12px;
 }
-
-.header .nav-tabs .active-tab {
+.nav-tabs .active-tab {
   color: #000;
   font-weight: 700;
   border-bottom: 2px solid #000;
 }
 
-/* 페이지 제목과 버튼을 한 줄로 */
+/* Title + Button */
 .page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
 }
-
-/* 제목 */
 .page-title {
-  font-size: 24px;
+  font-size: 32px !important;
   font-weight: 700;
   color: #171A1C;
 }
-
-/* 우측 버튼 */
-.page-action-button {
+.action-button {
   padding: 10px 18px;
   font-size: 16px;
   font-weight: 600;
@@ -71,27 +59,22 @@
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background 0.2s;
+}
+.action-button:hover {
+  background-color: #333;
 }
 
-.page-action-button:hover {
-  background-color: #333333;
-}
-
-/* 테이블 감싸는 영역 */
+/* Table */
 .table-wrapper {
   overflow-x: auto;
   width: 100%;
 }
-
-/* 테이블 스타일 */
 .delivery-table {
   border-collapse: collapse;
   width: 100%;
   min-width: 1400px;
   table-layout: fixed;
 }
-
 .delivery-table th,
 .delivery-table td {
   padding: 12px;
@@ -101,25 +84,92 @@
   text-overflow: ellipsis;
   text-align: center;
 }
-
 .delivery-table th {
   background: #f8f8f8;
   font-weight: 600;
   color: #6a7581;
 }
-
 .delivery-table td {
   background: #fff;
   color: #171A1C;
 }
+.delivery-table tbody tr:hover {
+  background-color: #f4f4f4;
+}
 
-/* 페이지네이션 */
+/* 상태 셀 */
+.status-cell {
+  position: relative;
+  padding: 0 12px;
+  overflow: visible !important;
+
+}
+
+.status-wrapper {
+  position: relative;
+  height: 100%;
+  display: flex;
+  justify-content: center;  /* 상태 글씨 가운데 */
+  align-items: center;
+}
+
+.status-text {
+  font-weight: 500;
+}
+
+
+.more-actions {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  transform: translateY(-50%);
+  display: flex;
+  overflow: visible !important;
+  z-index: 9999;
+}
+
+.more-icon {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.dropdown {
+  position: absolute;
+  bottom: 100%;            /* 셀 상단에 붙이기 */
+  right: 0;
+  background: white;
+  border: 1px solid #d9d9d9;
+  padding: 6px 12px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  z-index: 1000;           /* 표보다 높은 값 */
+  white-space: nowrap;
+}
+
+
+.cancel-btn {
+  background-color: #fff0f0;
+  color: #e01e1e;
+  border: 1px solid #e01e1e;
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  z-index: 10000 !important;
+}
+
+.cancel-btn:hover {
+  background-color: #ffe5e5;
+}
+
+
+/* Pagination */
 .pagination {
   margin-top: 20px;
   display: flex;
   gap: 8px;
 }
-
 .page-number {
   padding: 6px 12px;
   border: none;
@@ -127,7 +177,6 @@
   border-radius: 4px;
   cursor: pointer;
 }
-
 .page-number.active {
   background: #0759e6;
   color: #fff;

@@ -14,7 +14,7 @@ import CusRegisterForm from './cus/CustomerRegisterPage';
 import LandingPage from './cus/LandingPage';
 import CusDeliveryList from './cus/CusDeliveryList';
 import PaymentPage from './cus/PaymentPage';
-
+import CusDeliveryDetailPage from './cus/CusDeliveryDetailPage';
 function App() {
   return (
     <Router>
@@ -32,6 +32,8 @@ function App() {
         <Route path="/cus/landing" element={<LandingPage />} />
         <Route path="/cus/deliverylist" element={<CusDeliveryList />} />
         <Route path="/cus/payment" element={<PaymentPage />} />
+        <Route path="/customer/:requestId" element={<CusDeliveryDetailPage />} />
+
 
       </Routes>
     </Router>
