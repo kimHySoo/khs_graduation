@@ -130,14 +130,38 @@ export default function DeliveryDetailPage() {
           <div className="info-group">
             <div className="detail-section">
               <label className="pickup-photo-label">수령 완료 이미지</label>
-              <span>{item.photos?.pickup?.length > 0 ? <a href={`https://largeredjade.site${item.photos.pickup[0]}`} target="_blank" rel="noopener noreferrer">사진 보기</a> : '없음'}</span>
+              <span>
+                {item.photos?.pickup?.length > 0 ? (
+                  <a
+                    href={`https://largeredjade.site${item.photos.pickup[0].photo}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    사진 보기
+                  </a>
+                ) : (
+                  '없음'
+                )}
+              </span>
             </div>
           </div>
           <div style={{ height: '24px' }}></div>
           <div className="info-group">
             <div className="detail-section">
               <label className="delivery-photo-label">배송 완료 이미지</label>
-              <span>{item.photos?.delivery?.length > 0 ? <a href={`https://largeredjade.site${item.photos.delivery[0]}`} target="_blank" rel="noopener noreferrer">사진 보기</a> : '없음'}</span>
+              <span>
+                {item.photos?.delivery?.length > 0 ? (
+                  <a
+                    href={`https://largeredjade.site${item.photos.delivery[0].photo}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    사진 보기
+                  </a>
+                ) : (
+                  '없음'
+                )}
+              </span>
             </div>
           </div>
         </div>
