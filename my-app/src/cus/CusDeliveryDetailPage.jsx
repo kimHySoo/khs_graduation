@@ -9,7 +9,6 @@ export default function DeliveryDetailPage() {
   const navigate = useNavigate();
   const { requestId } = useParams();
   const [item, setItem] = useState(null);
-  const [showPhotos, setShowPhotos] = useState(false);
 
   useEffect(() => {
     const getDetail = async () => {
@@ -157,31 +156,6 @@ export default function DeliveryDetailPage() {
               </div>
             )}
           </div>
-
-          <button className="photo-toggle-button" onClick={() => setShowPhotos(prev => !prev)}>
-            {showPhotos ? '사진 숨기기' : '사진 보기'}
-          </button>
-
-          {showPhotos && (
-            <div className="photo-gallery">
-              {['pickup', 'delivery'].map(type => (
-                <div key={type}>
-                  <h4>{type === 'pickup' ? '수령 시 사진' : '배송 완료 사진'}</h4>
-                  <div className="photo-row">
-                    {(item.photos[type] || []).map((filename, idx) => (
-                      <img
-                        key={idx}
-                        src={`https://largeredjade.site${filename}`}
-                        alt={`${type} 사진 ${idx + 1}`}
-                        className="photo-thumbnail"
-                      />
-                    ))}
-                    {item.photos[type].length === 0 && <p className="photo-empty">사진 없음</p>}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
 
           <div className="person-info">
             <h3>택배원</h3>
