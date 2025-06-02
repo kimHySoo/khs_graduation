@@ -1,47 +1,108 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './DeliveryDashboard.css';
-import { loadGoogleMapsApi } from '../utils/loadGoogleMaps';
 import { useNavigate } from 'react-router-dom';
-import { fetchEmployeeStatuses } from '../services/api'; // 실제 API 호출
+import { loadGoogleMapsApi } from '../utils/loadGoogleMaps';
+import { fetchEmployeeStatuses } from '../services/api';
 
 export default function DeliveryDashboard() {
   const mapRef = useRef(null);
+  const mapInstance = useRef(null);
+  const markerMap = useRef(new Map());
+  const employeesRef = useRef([]);
+
   const navigate = useNavigate();
   const [employees, setEmployees] = useState([]);
+  const [locations, setLocations] = useState({}); // ✅ 직원 위치 저장
   const [page, setPage] = useState(1);
   const ITEMS_PER_PAGE = 10;
 
   useEffect(() => {
-    // 구글 지도 로드
     loadGoogleMapsApi().then(() => {
-      new window.google.maps.Map(mapRef.current, {
+      mapInstance.current = new window.google.maps.Map(mapRef.current, {
         center: { lat: 37.5665, lng: 126.9780 },
         zoom: 13,
       });
     });
 
-    // 직원 상태 API 호출
     fetchEmployeeStatuses()
-      .then((data) => {
-        console.log('✅ 백엔드 응답:', data);
-
-        const filtered = data.filter(
-          (item) =>
-            item.current_status === '배달중' ||
-            item.current_status === '대기중'
-        );
-
-        const sorted = [...filtered].sort((a, b) => {
-          const order = { '배달중': 0, '대기중': 1 };
-          return order[a.current_status] - order[b.current_status];
-        });
-
-        setEmployees(sorted);
+      .then((res) => {
+        setEmployees(res);
+        employeesRef.current = res;
       })
       .catch((err) => {
-        alert('직원 데이터를 불러오는 데 실패했습니다.');
-        console.error(err);
+        console.error('직원 상태 목록 불러오기 실패:', err);
       });
+
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      console.error('access_token 없음. 로그인 필요');
+      return;
+    }
+
+    let socket = null;
+    let reconnectTimeout = null;
+
+    const connectWebSocket = () => {
+      socket = new WebSocket(`wss://largeredjade.site/ws/admin/location/?token=${token}`);
+
+      socket.onopen = () => {
+        console.log('WebSocket 연결됨');
+        socket.send(JSON.stringify({ type: 'ping' }));
+      };
+
+      socket.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          const { courier_id, latitude, longitude } = data;
+
+          if (courier_id && latitude && longitude) {
+            const position = new window.google.maps.LatLng(latitude, longitude);
+
+            setLocations(prev => ({
+              ...prev,
+              [courier_id]: { lat: latitude, lng: longitude }
+            }));
+
+            const matched = employeesRef.current.find(emp => String(emp.id) === String(courier_id));
+            const profileImage = matched?.profile_image;
+
+            if (markerMap.current.has(courier_id)) {
+              markerMap.current.get(courier_id).setPosition(position);
+            } else {
+              const marker = new window.google.maps.Marker({
+                position,
+                map: mapInstance.current,
+                title: `기사 ID: ${courier_id}`,
+                icon: profileImage
+                  ? {
+                      url: profileImage,
+                      scaledSize: new window.google.maps.Size(40, 40),
+                    }
+                  : undefined,
+              });
+              markerMap.current.set(courier_id, marker);
+            }
+          }
+        } catch (e) {
+          console.error('⚠️ 메시지 파싱 실패:', e);
+        }
+      };
+
+      socket.onclose = (event) => {
+        reconnectTimeout = setTimeout(connectWebSocket, 3000);
+      };
+
+      socket.onerror = (err) => {
+        console.error('WebSocket 오류:', err);
+      };
+    };
+
+    connectWebSocket();
+
+    return () => {
+      if (socket) socket.close();
+      if (reconnectTimeout) clearTimeout(reconnectTimeout);
+    };
   }, []);
 
   const start = (page - 1) * ITEMS_PER_PAGE;
@@ -57,8 +118,8 @@ export default function DeliveryDashboard() {
           alt="logo"
           className="logo"
           onClick={() => {
-            localStorage.removeItem('access');
-            localStorage.removeItem('refresh');
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
             alert('로그아웃 되었습니다.');
             navigate('/cop/login');
           }}
@@ -67,32 +128,57 @@ export default function DeliveryDashboard() {
         <img src="/images/icon/login_2.png" alt="company" className="company" />
         <div className="nav-tabs">
           <span onClick={() => navigate('/cop/deliverylist')}>배송 접수 리스트</span>
-          <span className="active-tab" onClick={() => navigate('/cop/dashboard')}>
-            대시 보드
-          </span>
+          <span className="active-tab" onClick={() => navigate('/cop/dashboard')}>대시 보드</span>
           <span onClick={() => navigate('/cop/employeelist')}>직원 리스트</span>
         </div>
       </div>
 
       {/* 본문 */}
       <div className="dashboard-content">
-        {/* 직원 목록 */}
+        {/* 직원 리스트 */}
         <div className="employee-list">
           {paginatedEmployees.map((item, idx) => (
-            <div className="employee-card" key={idx}>
+            <div
+              className="employee-card"
+              key={idx}
+              onClick={() => {
+                const loc = locations[item.id];
+                if (loc && mapInstance.current) {
+                  mapInstance.current.panTo(new window.google.maps.LatLng(loc.lat, loc.lng));
+                  mapInstance.current.setZoom(15);
+                } else {
+                  alert('위치 정보가 아직 없습니다.');
+                }
+              }}
+              style={{ cursor: 'pointer' }}
+            >
               <div className="profile-pic">
                 {item.profile_image ? (
-                  <img src={item.profile_image} alt="profile" style={{ width: '100%', height: '100%', borderRadius: '50%' }} />
+                  <img
+                    src={item.profile_image}
+                    alt="profile"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      borderRadius: '50%',
+                      objectFit: 'cover'
+                    }}
+                  />
                 ) : (
-                  <div style={{ width: '100%', height: '100%', background: '#ddd', borderRadius: '50%' }} />
+                  <div
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      background: '#ddd',
+                      borderRadius: '50%',
+                    }}
+                  />
                 )}
               </div>
               <div className="employee-info">
                 <p className="employee-name">{item.name} 기사님</p>
                 <div className="status">
-                  <span
-                    className={`dot ${item.current_status === '배달중' ? 'active' : ''}`}
-                  />
+                  <span className={`dot ${item.current_status === '배달중' ? 'active' : ''}`} />
                   <span className="status-label">{item.current_status}</span>
                 </div>
               </div>

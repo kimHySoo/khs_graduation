@@ -3,9 +3,14 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 
 const ProtectedRoute = ({ children }) => {
-  const isAuthenticated = !!localStorage.getItem('access'); // 또는 context/state 사용
+  const isAuthenticated = !!localStorage.getItem('access_token');
 
-  return isAuthenticated ? children : <Navigate to="/cop/login" replace />;
+  const currentPath = window.location.pathname;
+  const isCustomer = currentPath.startsWith('/cus');
+
+  const redirectPath = isCustomer ? '/cus/login' : '/cop/login';
+
+  return isAuthenticated ? children : <Navigate to={redirectPath} replace />;
 };
 
 export default ProtectedRoute;

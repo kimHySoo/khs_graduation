@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
-import { loginUser } from '../services/api'; // 🔗 API 연동
+import { loginUser } from '../services/api'; 
 
 const GlobalStyle = createGlobalStyle`
   html, body {
@@ -80,8 +80,8 @@ const LoginForm = () => {
   const handleLogin = async () => {
     try {
       const response = await loginUser(formData);
-      localStorage.setItem('access', response.access_token);
-      localStorage.setItem('refresh', response.refresh_token);
+      localStorage.setItem('access_token', response.access_token);
+      localStorage.setItem('refresh_token', response.refresh_token);
       alert('로그인 성공');
       navigate('/cop/deliverylist');
     } catch (err) {

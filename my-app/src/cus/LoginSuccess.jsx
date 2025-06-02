@@ -13,7 +13,7 @@ function parseQuery(queryString) {
 
 export default function LoginSuccess() {
   const navigate = useNavigate();
-  const location = useLocation(); // 현재 URL 포함된 쿼리 추출
+  const location = useLocation();
 
   useEffect(() => {
     const handleLogin = async () => {
@@ -34,12 +34,11 @@ export default function LoginSuccess() {
 
         if (!userInfo.address) {
           navigate('/cus/register');
-          setTimeout(() => navigate('/cus/landing'), 1000);
         } else {
           navigate('/cus/landing');
         }
       } catch (err) {
-        console.error('❌ 로그인 확인 실패:', err);
+        console.error('로그인 확인 실패:', err);
         navigate('/cus/login');
       }
     };

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DaumPostcode from 'react-daum-postcode';
+import axiosInstance from '../services/axiosInstance';
 import './CustomerRegisterPage.css';
 
 export default function CustomerRegisterPage() {
@@ -13,7 +14,7 @@ export default function CustomerRegisterPage() {
     agreeAll: false,
     agreePrivacy: false,
   });
-  const [isAddressOpen, setIsAddressOpen] = useState(false); // 주소창 열림 여부
+  const [isAddressOpen, setIsAddressOpen] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -26,20 +27,9 @@ export default function CustomerRegisterPage() {
   const handleAddressComplete = (data) => {
     setFormData((prev) => ({
       ...prev,
-      address: data.address, // 도로명 주소 입력
+      address: data.address,
     }));
     setIsAddressOpen(false);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!isFormValid) {
-      alert('모든 정보를 입력하고 약관에 동의해 주세요.');
-      return;
-    }
-    console.log('회원가입 정보:', formData);
-    alert('회원가입이 완료되었습니다.');
-    navigate('/cus/login');
   };
 
   const isFormValid =
@@ -49,6 +39,31 @@ export default function CustomerRegisterPage() {
     formData.address.trim() !== '' &&
     formData.agreeAll &&
     formData.agreePrivacy;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!isFormValid) {
+      alert('모든 정보를 입력하고 약관에 동의해 주세요.');
+      return;
+    }
+
+    try {
+      // PATCH 요청으로 사용자 정보 업데이트
+      await axiosInstance.patch('/api/user/user-info/', {
+        name: formData.name,
+        phone: formData.phone,
+        birth: formData.birth,
+        address: formData.address,
+      });
+
+      alert('회원 정보가 성공적으로 등록되었습니다.');
+      navigate('/cus/landing');
+    } catch (error) {
+      console.error('회원정보 등록 실패:', error);
+      alert('회원정보 등록 중 오류가 발생했습니다.');
+    }
+  };
 
   return (
     <div className="register-page">
