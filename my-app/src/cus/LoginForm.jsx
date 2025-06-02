@@ -1,6 +1,6 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
+import { googleLoginRedirect } from '../services/api';
 
 const GlobalStyle = createGlobalStyle`
   html, body {
@@ -37,47 +37,32 @@ const FormGroup = styled.div`
   box-sizing: border-box;
 `;
 
-const InputBox = styled.div`
-  input {
-    width: 100%;
-    padding: 12px 16px;
-    font-size: 25px;
-    border: 1px solid #d8dbdf;
-    border-radius: 10px;
-    outline: none;
-    box-sizing: border-box;
-  }
-`;
-
-const SubmitButton = styled.div`
+const GoogleButton = styled.button`
   width: 100%;
-  height: 50px;
-  background: #000;
-  color: #fff;
-  font-size: 25px;
-  font-weight: 600;
-  border: none;
-  border-radius: 10px;
+  padding: 12px;
+  font-size: 18px;
+  background-color: white;
+  color: #444;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-`;
+  gap: 10px;
 
-const SignupLink = styled.div`
-  text-align: center;
-  font-size: 16px;
-  color: #888;
-  cursor: pointer;
-  margin-top: -10px;
-
-  &:hover {
-    text-decoration: underline;
+  img {
+    width: 20px;
+    height: 20px;
   }
 `;
 
+
 const LoginForm = () => {
-  const navigate = useNavigate();
+
+  const handleGoogleLogin = () => {
+    googleLoginRedirect();
+  };
 
   return (
     <>
@@ -85,18 +70,11 @@ const LoginForm = () => {
       <Container>
         <Logo src="/images/icon/login_3.png" alt="logo" />
         <FormGroup>
-          <InputBox>
-            <input type="text" placeholder="아이디를 입력해주세요" />
-          </InputBox>
-          <InputBox>
-            <input type="password" placeholder="비밀번호를 입력해주세요" />
-          </InputBox>
-          <SubmitButton onClick={() => navigate('/cus/landing')}>
-            로그인
-          </SubmitButton>
-          <SignupLink onClick={() => navigate('/cus/register')}>
-            회원가입
-          </SignupLink>
+          <GoogleButton onClick={handleGoogleLogin}>
+            <img src="/images/icon/googlelogo.png" alt="google" />
+            구글 로그인
+          </GoogleButton>
+
         </FormGroup>
       </Container>
     </>

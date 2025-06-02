@@ -76,13 +76,6 @@
   color: #B0B0B0;
 }
 
-.register-form {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
 .form-group {
   display: flex;
   flex-direction: column;
@@ -102,15 +95,43 @@
   border: 1px solid #D8DBDF;
   border-radius: 10px;
 }
+.form-group.row-align {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* 입력창 간격 줄이기 */
+.register-form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px !important; 
+}
 
 .radio-group {
   display: flex;
+  flex-direction: row;
   gap: 20px;
-  font-size: 20px;
-  font-weight: 600;
+  align-items: center;
 }
 
-.submit-button {
+.radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #2E3338;
+}
+
+.inline-button {
+  margin-top: 0;
+  width: 200px;
+  height: 50px;
+}
+
+.cor-register-button  {
   margin-top: 20px;
   padding: 12px;
   background: #1A1A1A;
@@ -120,4 +141,28 @@
   border: none;
   border-radius: 10px;
   cursor: pointer;
+}
+
+.form-group.role-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.role-group .radio-group {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  align-items: center;
+}
+
+.role-group .radio-group label {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #2E3338;
+  line-height: 1;
 }

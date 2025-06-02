@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './CusDeliveryDetailPage.css';
 import { useNavigate, useParams } from 'react-router-dom';
+import { fetchCusDeliveryDetail } from '../services/api';
 
 export default function DeliveryDetailPage() {
   const navigate = useNavigate();
@@ -8,17 +9,41 @@ export default function DeliveryDetailPage() {
   const [item, setItem] = useState(null);
 
   useEffect(() => {
-    fetch('/data/delivery_data.json')
-      .then(res => res.json())
-      .then(data => {
-        const found = data.find(d => d.requestId === requestId);
-        setItem(found || null);
-      })
-      .catch(() => setItem(null));
+    const getDetail = async () => {
+      try {
+        const data = await fetchCusDeliveryDetail(requestId);
+
+        const formattedItem = {
+          requestId: data.requestId,
+          status: data.status,
+          pickupLocation: data.pickup_location,
+          pickupTime: data.pickup_time,
+          note: data.instructions,
+          deliveryLocation: data.recipient?.address,
+          receiverName: data.recipient?.name,
+          receiverPhone: data.recipient?.phone,
+          itemType: data.item_type,
+          itemName: data.item_name,
+          itemWeight: data.item_weight,
+          itemDeclaredValue: data.item_value,
+          clientName: data.client?.name,
+          clientPhone: data.client?.phone,
+          courierName: data.courier?.name,
+          courierPhone: data.courier?.phone,
+        };
+
+        setItem(formattedItem);
+      } catch (err) {
+        console.error('❌ 배송 상세 정보 불러오기 실패:', err);
+        setItem(null);
+      }
+    };
+
+    getDetail();
   }, [requestId]);
 
   if (!item) {
-    return <div className="delivery-detail-page">데이터를 불러오는 중입니다…</div>;
+    return <div className="delivery-detail-page">배송 정보를 불러오는 중입니다…</div>;
   }
 
   return (
@@ -53,7 +78,7 @@ export default function DeliveryDetailPage() {
             <img src="/icons/order-completed.svg" alt="배달 접수" />
             <span>배송 접수</span>
         </div>
-        <div className="step-line" /> {/* 선 추가 */}
+        <div className="step-line" />
 
         <div className={`step ${item.status === '기사 배정' ? 'active' : ''}`}>
             <img src="/icons/deliveryman.svg" alt="기사 배정" />
@@ -80,9 +105,7 @@ export default function DeliveryDetailPage() {
         </div>
 
 
-      {/* 상세 정보 카드 */}
       <div className="detail-card">
-        {/* 왼쪽: 위치 및 물품 정보 */}
         <div className="detail-left">
           <div className="info-group">
             <div className="detail-section">

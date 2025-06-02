@@ -100,7 +100,7 @@ export default function CustomerRegisterPage() {
 
           <div className="register-input-group">
             <label>주소</label>
-            <div style={{ display: 'flex', gap: '10px' }}>
+            <div className="address-search-wrapper large">
               <input
                 type="text"
                 name="address"
@@ -108,16 +108,18 @@ export default function CustomerRegisterPage() {
                 value={formData.address}
                 onChange={handleChange}
                 readOnly
-                style={{ flex: 1 }}
               />
               <button type="button" onClick={() => setIsAddressOpen(true)}>
                 주소 찾기
               </button>
             </div>
             {isAddressOpen && (
-              <div style={{ position: 'absolute', zIndex: 1000, marginTop: '10px' }}>
-                <DaumPostcode onComplete={handleAddressComplete} />
-              </div>
+              <>
+                <div className="address-modal-backdrop" onClick={() => setIsAddressOpen(false)}></div>
+                <div className="react-daum-postcode-wrapper">
+                  <DaumPostcode onComplete={handleAddressComplete} autoClose />
+                </div>
+              </>
             )}
           </div>
 

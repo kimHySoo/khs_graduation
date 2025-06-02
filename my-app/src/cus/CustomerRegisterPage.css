@@ -150,3 +150,22 @@
   z-index: 1000;
   top: 100%;
 }
+.address-search-wrapper.large {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.address-search-wrapper.large input {
+  flex: 1;
+  padding: 12px;
+  font-size: 16px;
+}
+
+.address-search-wrapper.large button {
+  padding: 10px 16px;
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  font-size: 14px;
+}

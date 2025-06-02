@@ -2,16 +2,17 @@ import React, { useEffect, useRef, useState } from 'react';
 import './DeliveryDashboard.css';
 import { loadGoogleMapsApi } from '../utils/loadGoogleMaps';
 import { useNavigate } from 'react-router-dom';
+import { fetchEmployeeStatuses } from '../services/api'; // 실제 API 호출
 
-export default function GoogleMapDashboard() {
+export default function DeliveryDashboard() {
   const mapRef = useRef(null);
   const navigate = useNavigate();
-
   const [employees, setEmployees] = useState([]);
   const [page, setPage] = useState(1);
   const ITEMS_PER_PAGE = 10;
 
   useEffect(() => {
+    // 구글 지도 로드
     loadGoogleMapsApi().then(() => {
       new window.google.maps.Map(mapRef.current, {
         center: { lat: 37.5665, lng: 126.9780 },
@@ -19,20 +20,27 @@ export default function GoogleMapDashboard() {
       });
     });
 
-    fetch('/data/employeelist_data.json')
-      .then((res) => res.json())
+    // 직원 상태 API 호출
+    fetchEmployeeStatuses()
       .then((data) => {
+        console.log('✅ 백엔드 응답:', data);
+
         const filtered = data.filter(
-          (item) => item.status === '배달중' || item.status === '대기중'
+          (item) =>
+            item.current_status === '배달중' ||
+            item.current_status === '대기중'
         );
 
-        // "배달중" 먼저, "대기중" 나중
         const sorted = [...filtered].sort((a, b) => {
           const order = { '배달중': 0, '대기중': 1 };
-          return order[a.status] - order[b.status];
+          return order[a.current_status] - order[b.current_status];
         });
 
         setEmployees(sorted);
+      })
+      .catch((err) => {
+        alert('직원 데이터를 불러오는 데 실패했습니다.');
+        console.error(err);
       });
   }, []);
 
@@ -44,11 +52,24 @@ export default function GoogleMapDashboard() {
     <div className="dashboard-container">
       {/* 헤더 */}
       <div className="header">
-        <img src="/images/icon/login_1.png" alt="logo" className="logo" />
+        <img
+          src="/images/icon/login_1.png"
+          alt="logo"
+          className="logo"
+          onClick={() => {
+            localStorage.removeItem('access');
+            localStorage.removeItem('refresh');
+            alert('로그아웃 되었습니다.');
+            navigate('/cop/login');
+          }}
+          style={{ cursor: 'pointer' }}
+        />
         <img src="/images/icon/login_2.png" alt="company" className="company" />
         <div className="nav-tabs">
           <span onClick={() => navigate('/cop/deliverylist')}>배송 접수 리스트</span>
-          <span className="active-tab" onClick={() => navigate('/cop/dashboard')}>대시 보드</span>
+          <span className="active-tab" onClick={() => navigate('/cop/dashboard')}>
+            대시 보드
+          </span>
           <span onClick={() => navigate('/cop/employeelist')}>직원 리스트</span>
         </div>
       </div>
@@ -59,17 +80,29 @@ export default function GoogleMapDashboard() {
         <div className="employee-list">
           {paginatedEmployees.map((item, idx) => (
             <div className="employee-card" key={idx}>
-              <div className="profile-pic" />
+              <div className="profile-pic">
+                {item.profile_image ? (
+                  <img src={item.profile_image} alt="profile" style={{ width: '100%', height: '100%', borderRadius: '50%' }} />
+                ) : (
+                  <div style={{ width: '100%', height: '100%', background: '#ddd', borderRadius: '50%' }} />
+                )}
+              </div>
               <div className="employee-info">
                 <p className="employee-name">{item.name} 기사님</p>
                 <div className="status">
-                  <span className={`dot ${item.status === '배달중' ? 'active' : ''}`} />
-                  <span className="status-label">{item.status}</span>
+                  <span
+                    className={`dot ${item.current_status === '배달중' ? 'active' : ''}`}
+                  />
+                  <span className="status-label">{item.current_status}</span>
                 </div>
               </div>
               <div className="actions">
-                <img src="/images/cop/call.svg" alt="call" />
-                <img src="/images/cop/message.svg" alt="msg" />
+                <a href={`tel:${item.phone}`}>
+                  <img src="/images/cop/call.svg" alt="call" />
+                </a>
+                <a href={`sms:${item.phone}`}>
+                  <img src="/images/cop/message.svg" alt="msg" />
+                </a>
               </div>
             </div>
           ))}

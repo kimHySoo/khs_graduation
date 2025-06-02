@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
+import { loginUser } from '../services/api'; // 🔗 API 연동
 
 const GlobalStyle = createGlobalStyle`
   html, body {
@@ -66,6 +67,28 @@ const SubmitButton = styled.div`
 
 const LoginForm = () => {
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    id: '',
+    password: ''
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleLogin = async () => {
+    try {
+      const response = await loginUser(formData);
+      localStorage.setItem('access', response.access_token);
+      localStorage.setItem('refresh', response.refresh_token);
+      alert('로그인 성공');
+      navigate('/cop/deliverylist');
+    } catch (err) {
+      console.error('로그인 실패:', err);
+      alert('아이디 또는 비밀번호가 잘못되었습니다.');
+    }
+  };
 
   return (
     <>
@@ -74,12 +97,24 @@ const LoginForm = () => {
         <Logo src="/images/icon/login_3.png" alt="logo" />
         <FormGroup>
           <InputBox>
-            <input type="text" placeholder="아이디를 입력해주세요" />
+            <input
+              type="text"
+              name="id"
+              placeholder="아이디를 입력해주세요"
+              value={formData.id}
+              onChange={handleChange}
+            />
           </InputBox>
           <InputBox>
-            <input type="password" placeholder="비밀번호를 입력해주세요" />
+            <input
+              type="password"
+              name="password"
+              placeholder="비밀번호를 입력해주세요"
+              value={formData.password}
+              onChange={handleChange}
+            />
           </InputBox>
-          <SubmitButton onClick={() => navigate('/cop/deliverylist')}>
+          <SubmitButton onClick={handleLogin}>
             로그인
           </SubmitButton>
         </FormGroup>

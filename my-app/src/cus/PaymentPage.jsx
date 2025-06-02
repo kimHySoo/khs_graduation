@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DaumPostcode from 'react-daum-postcode';
 import './PaymentPage.css';
+import { createDeliveryRequest } from '../services/api';
+import axiosInstance from '../services/axiosInstance';
 
 export default function PaymentPage() {
   const totalAmount = 35000;
@@ -26,18 +28,22 @@ export default function PaymentPage() {
   const [openPostcodeDelivery, setOpenPostcodeDelivery] = useState(false);
 
   useEffect(() => {
-    fetch('/data/customer_data.json')
-      .then(res => res.json())
-      .then(data => {
-        if (data && data.length > 0) {
-          setFormData(prev => ({
-            ...prev,
-            clientName: data[0].name,
-            clientPhone: data[0].phone,
-          }));
-        }
-      })
-      .catch(err => console.error('고객 정보 로딩 오류:', err));
+    const fetchUserInfo = async () => {
+      try {
+        const res = await axiosInstance.get('/api/delivery/user-info/');
+        const user = res.data;
+
+        setFormData((prev) => ({
+          ...prev,
+          clientName: user.name || '',
+          clientPhone: user.phone || '',
+        }));
+      } catch (err) {
+        console.error('❌ 사용자 정보 불러오기 실패:', err);
+      }
+    };
+
+    fetchUserInfo();
   }, []);
 
   const handleChange = (e) => {
@@ -49,8 +55,20 @@ export default function PaymentPage() {
     alert(`${method} 결제가 진행됩니다.`);
   };
 
-  const handleSubmit = () => {
-    alert('배송이 접수되었습니다.');
+  const handleSubmit = async () => {
+    if (!isFormValid) {
+      alert('모든 필수 정보를 입력해 주세요.');
+      return;
+    }
+
+    try {
+      await createDeliveryRequest(formData);
+      alert('배송이 성공적으로 접수되었습니다.');
+      navigate('/cus/deliverylist');
+    } catch (error) {
+      console.error('배송 접수 실패:', error);
+      alert('배송 접수에 실패했습니다. 다시 시도해주세요.');
+    }
   };
 
   const handleCompletePickup = (data) => {
@@ -93,16 +111,16 @@ export default function PaymentPage() {
           <h2 className="section-title">의뢰인 정보</h2>
           <label>
             <span className="label-text">의뢰인<span className="asterisk">*</span></span>
-            <input name="clientName" value={formData.clientName} readOnly placeholder="고객 이름" />
+            <input name="clientName" value={formData.clientName} readOnly />
           </label>
           <label>
             <span className="label-text">의뢰인 연락처<span className="asterisk">*</span></span>
-            <input name="clientPhone" value={formData.clientPhone} readOnly placeholder="고객 연락처" />
+            <input name="clientPhone" value={formData.clientPhone} readOnly />
           </label>
           <label>
             <span className="label-text">수령 장소<span className="asterisk">*</span></span>
             <div className="address-search-wrapper large">
-              <input name="pickupLocation" value={formData.pickupLocation} readOnly placeholder="주소 검색 클릭" />
+              <input name="pickupLocation" value={formData.pickupLocation} readOnly />
               <button type="button" onClick={() => setOpenPostcodePickup(true)}>주소 검색</button>
             </div>
             {openPostcodePickup && (
@@ -116,26 +134,26 @@ export default function PaymentPage() {
           </label>
           <label>
             <span className="label-text">수령 시간</span>
-            <input name="pickupTime" value={formData.pickupTime} onChange={handleChange} placeholder="( 예시 : 오후 2시 )" />
+            <input name="pickupTime" value={formData.pickupTime} onChange={handleChange} placeholder="(예: 2025-06-01T14:30)" />
           </label>
           <label>
             <span className="label-text">유의 사항</span>
-            <input name="note" value={formData.note} onChange={handleChange} placeholder="( 예시 : 경비실에 맡겨주세요 )" />
+            <input name="note" value={formData.note} onChange={handleChange} />
           </label>
 
           <h2 className="section-title">인수인 정보</h2>
           <label>
             <span className="label-text">인수인<span className="asterisk">*</span></span>
-            <input name="receiverName" value={formData.receiverName} onChange={handleChange} placeholder="( 예시 : 김철수 )" />
+            <input name="receiverName" value={formData.receiverName} onChange={handleChange} />
           </label>
           <label>
             <span className="label-text">인수인 연락처<span className="asterisk">*</span></span>
-            <input name="receiverPhone" value={formData.receiverPhone} onChange={handleChange} placeholder="( 예시 : 010-5678-5678 )" />
+            <input name="receiverPhone" value={formData.receiverPhone} onChange={handleChange} />
           </label>
           <label>
             <span className="label-text">배달 장소<span className="asterisk">*</span></span>
             <div className="address-search-wrapper large">
-              <input name="deliveryLocation" value={formData.deliveryLocation} readOnly placeholder="주소 검색 클릭" />
+              <input name="deliveryLocation" value={formData.deliveryLocation} readOnly />
               <button type="button" onClick={() => setOpenPostcodeDelivery(true)}>주소 검색</button>
             </div>
             {openPostcodeDelivery && (
@@ -154,19 +172,19 @@ export default function PaymentPage() {
           <p className="warning">실버로드는 실버 근로자를 위하여 물품 5kg 한도로 접수 가능합니다.</p>
           <label>
             <span className="label-text">물품 종류<span className="asterisk">*</span></span>
-            <input name="itemType" value={formData.itemType} onChange={handleChange} placeholder="( 예시 : 의류 )" />
+            <input name="itemType" value={formData.itemType} onChange={handleChange} />
           </label>
           <label>
             <span className="label-text">물품명<span className="asterisk">*</span></span>
-            <input name="itemName" value={formData.itemName} onChange={handleChange} placeholder="( 예시 : 정장 )" />
+            <input name="itemName" value={formData.itemName} onChange={handleChange} />
           </label>
           <label>
             <span className="label-text">물품 액면가<span className="asterisk">*</span></span>
-            <input name="itemDeclaredValue" value={formData.itemDeclaredValue} onChange={handleChange} placeholder="( 예시 : 10,000원 )" />
+            <input name="itemDeclaredValue" value={formData.itemDeclaredValue} onChange={handleChange} />
           </label>
           <label>
             <span className="label-text">물품 무게<span className="asterisk">*</span></span>
-            <input name="itemWeight" value={formData.itemWeight} onChange={handleChange} placeholder="( 예시 : 3kg )" />
+            <input name="itemWeight" value={formData.itemWeight} onChange={handleChange} />
           </label>
 
           <div className="payment-footer-area">

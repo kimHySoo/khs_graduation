@@ -190,7 +190,6 @@ input {
   color: #666;
   cursor: not-allowed;
 }
-/* 주소 검색 입력창 wrapper */
 .address-search-wrapper {
   display: flex;
   gap: 10px;
@@ -201,7 +200,6 @@ input {
   flex: 1;
 }
 
-/* 주소 검색 버튼 */
 .address-search-wrapper button {
   padding: 10px 14px;
   font-size: 14px;
@@ -216,7 +214,6 @@ input {
   background-color: #e0e0e0;
 }
 
-/* 주소 검색 모달 스타일 */
 .react-daum-postcode-wrapper {
   position: fixed;
   z-index: 1000;
@@ -228,7 +225,6 @@ input {
   overflow: hidden;
 }
 
-/* 전체 화면을 덮는 배경 (모달 백그라운드) */
 .address-modal-backdrop {
   position: fixed;
   top: 0;

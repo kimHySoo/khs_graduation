@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './EmployeeListPage.css';
 import { useNavigate } from 'react-router-dom';
+import { fetchEmployees } from '../services/api';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -8,23 +9,39 @@ export default function EmployeeListPage() {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
 
   useEffect(() => {
-    fetch('/data/employeelist_data.json')
-      .then(res => res.json())
-      .then(setData)
-      .catch(err => console.error('데이터 불러오기 오류:', err));
-  }, []);
+    const loadData = async () => {
+      try {
+        const res = await fetchEmployees(page);
+        setData(res.results || []);
+        setTotalCount(res.count || 0);
+      } catch (error) {
+        console.error('직원 목록 로드 실패:', error.response?.data || error.message);
+      }
+    };
+    loadData();
+  }, [page]);
 
-  const start = (page - 1) * ITEMS_PER_PAGE;
-  const pageData = data.slice(start, start + ITEMS_PER_PAGE);
-  const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
 
   return (
     <div className="delivery-container">
-      {/* 상단 로고 및 탭 */}
+      {/* 헤더 */}
       <div className="header">
-        <img src="/images/icon/login_1.png" alt="logo" className="logo" />
+        <img
+          src="/images/icon/login_1.png"
+          alt="logo"
+          className="logo"
+          onClick={() => {
+            localStorage.removeItem('access');
+            localStorage.removeItem('refresh');
+            alert('로그아웃 되었습니다.');
+            navigate('/cop/login');
+          }}
+          style={{ cursor: 'pointer' }} // 커서 모양 변경
+        />
         <img src="/images/icon/login_2.png" alt="company" className="company" />
         <div className="nav-tabs">
           <span onClick={() => navigate('/cop/deliverylist')}>배송 접수 리스트</span>
@@ -33,25 +50,20 @@ export default function EmployeeListPage() {
         </div>
       </div>
 
-      {/* 제목 */}
+      {/* 타이틀 및 버튼 */}
       <div className="page-header">
         <h2 className="page-title">직원 리스트</h2>
-
-        <div
-          className="register-button"
-          onClick={() => navigate('/cop/register')}
-        >
+        <div className="register-button" onClick={() => navigate('/cop/register')}>
           직원 등록
         </div>
       </div>
-
 
       {/* 테이블 */}
       <div className="table-wrapper">
         <table className="delivery-table">
           <thead>
             <tr>
-              <th>요청번호</th>
+              <th>아이디</th>
               <th>직원 유형</th>
               <th>이름</th>
               <th>생년월일</th>
@@ -61,15 +73,15 @@ export default function EmployeeListPage() {
             </tr>
           </thead>
           <tbody>
-            {pageData.map((item, i) => (
+            {data.map((item, i) => (
               <tr key={i}>
-                <td>{item.request_number}</td>
-                <td>{item.employee_type}</td>
+                <td>{item.id}</td>
+                <td>{item.role}</td>
                 <td>{item.name}</td>
-                <td>{item.birth_date}</td>
-                <td>{item.phone_number}</td>
+                <td>{item.birth}</td>
+                <td>{item.phone}</td>
                 <td>{item.address}</td>
-                <td>{item.hire_date}</td>
+                <td>{item.created_date}</td>
               </tr>
             ))}
           </tbody>
