@@ -4,9 +4,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { fetchCusDeliveryDetail } from '../services/api';
 
 export default function DeliveryDetailPage() {
+  console.log("✅ CusDeliveryDetailPage 렌더링됨");
+
   const navigate = useNavigate();
   const { requestId } = useParams();
   const [item, setItem] = useState(null);
+  const [showPhotos, setShowPhotos] = useState(false);
 
   useEffect(() => {
     const getDetail = async () => {
@@ -14,22 +17,24 @@ export default function DeliveryDetailPage() {
         const data = await fetchCusDeliveryDetail(requestId);
 
         const formattedItem = {
-          requestId: data.requestId,
+          id: data.id,
           status: data.status,
-          pickupLocation: data.pickup_location,
-          pickupTime: data.pickup_time,
-          note: data.instructions,
-          deliveryLocation: data.recipient?.address,
-          receiverName: data.recipient?.name,
-          receiverPhone: data.recipient?.phone,
-          itemType: data.item_type,
-          itemName: data.item_name,
-          itemWeight: data.item_weight,
-          itemDeclaredValue: data.item_value,
-          clientName: data.client?.name,
-          clientPhone: data.client?.phone,
-          courierName: data.courier?.name,
-          courierPhone: data.courier?.phone,
+          pickup_location: data.pickup_location,
+          pickup_time: data.pickup_time,
+          item_type: data.item_type,
+          item_name: data.item_name,
+          item_weight: data.item_weight,
+          item_value: data.item_value,
+          address: data.address,
+          instructions: data.instructions,
+          requester_name: data.requester_name,
+          requester_phone: data.requester_phone,
+          recipient_name: data.recipient_name,
+          recipient_phone: data.recipient_phone,
+          delivery_person_name: data.delivery_person_name,
+          delivery_person_phone: data.delivery_person_phone,
+          delivery_peroson_profile_image: data.delivery_peroson_profile_image,
+          photos: data.photos || { pickup: [], delivery: [] },
         };
 
         setItem(formattedItem);
@@ -48,137 +53,131 @@ export default function DeliveryDetailPage() {
 
   return (
     <div className="cus-delivery-detail-page">
-      {/* 상단 네비게이션 */}
+      {/* 상단 네비 */}
       <header className="header">
-        <img
-          src="/images/icon/login_1.png"
-          alt="logo"
-          className="logo"
-        />
-        <img
-          src="/images/icon/login_2.png"
-          alt="company"
-          className="company"
-        />
+        <img src="/images/icon/login_1.png" alt="logo" className="logo" />
+        <img src="/images/icon/login_2.png" alt="company" className="company" />
         <nav className="nav-tabs">
-          <span
-            className="active"
-            onClick={() => navigate('/cus/deliverylist')}
-          >내 배송 접수 리스트
+          <span className="active" onClick={() => navigate('/cus/deliverylist')}>
+            내 배송 접수 리스트
           </span>
         </nav>
       </header>
 
-      {/* 주문 번호 */}
-      <h2 className="order-number">주문 번호 {item.requestId}</h2>
+      <h2 className="order-number">주문 번호 {item.id}</h2>
 
-      {/* 배송 단계 아이콘 및 텍스트 */}
-    <div className="delivery-steps">
-        <div className={`step ${item.status === '배송 접수' ? 'active' : ''}`}>
-            <img src="/icons/order-completed.svg" alt="배달 접수" />
-            <span>배송 접수</span>
-        </div>
-        <div className="step-line" />
-
-        <div className={`step ${item.status === '기사 배정' ? 'active' : ''}`}>
-            <img src="/icons/deliveryman.svg" alt="기사 배정" />
-            <span>기사 배정</span>
-        </div>
-        <div className="step-line" />
-
-        <div className={`step ${item.status === '상품 인수' ? 'active' : ''}`}>
-            <img src="/icons/import.svg" alt="상품 인수" />
-            <span>상품 인수</span>
-        </div>
-        <div className="step-line" />
-
-        <div className={`step ${item.status === '배송 출발' || item.status === '배송중' ? 'active' : ''}`}>
-            <img src="/icons/walk.svg" alt="배송 출발" />
-            <span>배송 출발</span>
-        </div>
-        <div className="step-line" />
-
-        <div className={`step ${item.status === '배송 완료' ? 'active' : ''}`}>
-            <img src="/icons/delivery-complete.svg" alt="배송 완료" />
-            <span>배송 완료</span>
-        </div>
-        </div>
-
+      <div className="delivery-steps">
+        {['배송 접수', '기사 배정', '상품 인수', '배송 출발', '배송 완료'].map((step, index) => (
+          <React.Fragment key={step}>
+            <div
+              className={`step ${
+                item.status === step || (step === '배송 출발' && item.status === '배송중') ? 'active' : ''
+              }`}
+            >
+              <img
+                src={`/icons/${['order-completed', 'deliveryman', 'import', 'walk', 'delivery-complete'][index]}.svg`}
+                alt={step}
+              />
+              <span>{step}</span>
+            </div>
+            {index < 4 && <div className="step-line" />}
+          </React.Fragment>
+        ))}
+      </div>
 
       <div className="detail-card">
         <div className="detail-left">
           <div className="info-group">
             <div className="detail-section">
               <label>수령 장소</label>
-              <span>{item.pickupLocation}</span>
+              <span>{item.pickup_location}</span>
             </div>
             <div className="detail-section">
               <label>수령 시간</label>
-              <span>{item.pickupTime}</span>
+              <span>{item.pickup_time}</span>
             </div>
           </div>
           <hr />
-
           <div className="info-group">
             <div className="detail-section">
               <label>물품 종류</label>
-              <span>{item.itemType}</span>
+              <span>{item.item_type}</span>
             </div>
             <div className="detail-section">
               <label>물품명</label>
-              <span>{item.itemName}</span>
+              <span>{item.item_name}</span>
             </div>
             <div className="detail-section">
               <label>물품 무게</label>
-              <span>{item.itemWeight}</span>
+              <span>{item.item_weight}g</span>
             </div>
             <div className="detail-section">
               <label>물품 액면가</label>
-              <span>{item.itemDeclaredValue}</span>
+              <span>{item.item_value.toLocaleString()}원</span>
             </div>
           </div>
           <hr />
-
           <div className="info-group">
             <div className="detail-section">
               <label>배송 장소</label>
-              <span>{item.deliveryLocation}</span>
+              <span>{item.address}</span>
             </div>
             <div className="detail-section">
               <label>유의사항</label>
-              <span>{item.note}</span>
+              <span>{item.instructions}</span>
             </div>
           </div>
         </div>
 
-        {/* 오른쪽: 사진 업로드 & 인물 정보 */}
         <div className="detail-right">
           <div className="upload-box">
-            <div className="upload-placeholder">
-              <i className="icon-plus">+</i>
-            </div>
+            {item.delivery_peroson_profile_image ? (
+              <img
+                src={`https://largeredjade.site${item.delivery_peroson_profile_image}`}
+                alt="택배원 프로필"
+                className="courier-profile-image"
+              />
+            ) : (
+              <div className="upload-placeholder">
+                <i className="icon-plus">+</i>
+              </div>
+            )}
           </div>
+
+          <button className="photo-toggle-button" onClick={() => setShowPhotos(prev => !prev)}>
+            {showPhotos ? '사진 숨기기' : '사진 보기'}
+          </button>
+
+          {showPhotos && (
+            <div className="photo-gallery">
+              {['pickup', 'delivery'].map(type => (
+                <div key={type}>
+                  <h4>{type === 'pickup' ? '수령 시 사진' : '배송 완료 사진'}</h4>
+                  <div className="photo-row">
+                    {(item.photos[type] || []).map((filename, idx) => (
+                      <img
+                        key={idx}
+                        src={`https://largeredjade.site${filename}`}
+                        alt={`${type} 사진 ${idx + 1}`}
+                        className="photo-thumbnail"
+                      />
+                    ))}
+                    {item.photos[type].length === 0 && <p className="photo-empty">사진 없음</p>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
           <div className="person-info">
             <h3>택배원</h3>
-            <strong>{item.courierName}</strong>
-            <p>{item.courierPhone}</p>
+            <strong>{item.delivery_person_name || '미배정'}</strong>
+            <p>{item.delivery_person_phone || '-'}</p>
             <div className="sub-info">
-              <div>
-                <span className="label">의뢰인</span>
-                <span className="value">{item.clientName}</span>
-              </div>
-              <div>
-                <span className="label">전화번호</span>
-                <span className="value">{item.clientPhone}</span>
-              </div>
-              <div>
-                <span className="label">인수인</span>
-                <span className="value">{item.receiverName}</span>
-              </div>
-              <div>
-                <span className="label">전화번호</span>
-                <span className="value">{item.receiverPhone}</span>
-              </div>
+              <div><span className="label">의뢰인</span><span className="value">{item.requester_name}</span></div>
+              <div><span className="label">전화번호</span><span className="value">{item.requester_phone}</span></div>
+              <div><span className="label">인수인</span><span className="value">{item.recipient_name}</span></div>
+              <div><span className="label">전화번호</span><span className="value">{item.recipient_phone}</span></div>
             </div>
           </div>
         </div>

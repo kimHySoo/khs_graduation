@@ -68,8 +68,19 @@ export default function DeliveryDetailPage() {
 
         <div className="detail-right">
           <div className="upload-box">
-            <div className="upload-placeholder"><i className="icon-plus">+</i></div>
+            {item.delivery_peroson_profile_image ? (
+              <img
+                src={`https://largeredjade.site${item.delivery_peroson_profile_image}`}
+                alt="택배원 프로필"
+                className="courier-profile-image"
+              />
+            ) : (
+              <div className="upload-placeholder">
+                <i className="icon-plus">+</i>
+              </div>
+            )}
           </div>
+
           <div className="person-info">
             <h3>택배원</h3>
             <strong>{item.delivery_person_name || '미배정'}</strong>

@@ -68,6 +68,7 @@ function App() {
           }
         />
 
+
         {/* 기업/기사 로그인 필요 경로 */}
         <Route
           path="/cop/register"
