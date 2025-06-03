@@ -17,6 +17,7 @@ export default function PaymentPage() {
     receiverName: '',
     receiverPhone: '',
     deliveryLocation: '',
+    deliveryDetail: '',
     itemType: '',
     itemName: '',
     itemDeclaredValue: '',
@@ -243,8 +244,8 @@ export default function PaymentPage() {
               세부 장소<span className="asterisk">*</span>
             </span>
             <input
-              name="pickupDetail"
-              value={formData.pickupDetail}
+              name="deliveryDetail"
+              value={formData.deliveryDetail}
               onChange={handleChange}
               placeholder="예: 건물명, 동호수 등"
             />
