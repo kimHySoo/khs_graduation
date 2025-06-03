@@ -3,17 +3,17 @@
   "name": "SilverRoad: 경험이 만든 신뢰, 실버로드 배송",
   "icons": [
     {
-      "src": "images/icon/login_1.png",
+      "src": "login_1.png",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/png"
     },
     {
-      "src": "images/icon/login_1.png",
+      "src": "login_1.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "images/icon/login_1.png",
+      "src": "login_1.png",
       "type": "image/png",
       "sizes": "512x512"
     }
