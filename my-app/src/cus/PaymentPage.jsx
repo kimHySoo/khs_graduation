@@ -222,6 +222,17 @@ export default function PaymentPage() {
               >
                 주소 검색
               </button>
+                      <label>
+            <span className="label-text">
+              세부 장소<span className="asterisk">*</span>
+            </span>
+            <input
+              name="pickupDetail"
+              value={formData.pickupDetail}
+              onChange={handleChange}
+              placeholder="예: 건물명, 동호수 등"
+            />
+          </label>
             </div>
             {openPostcodeDelivery && (
               <>
