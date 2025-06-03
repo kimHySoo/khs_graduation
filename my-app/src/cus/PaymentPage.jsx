@@ -86,7 +86,6 @@ export default function PaymentPage() {
     formData.clientName.trim() &&
     formData.clientPhone.trim() &&
     formData.pickupLocation.trim() &&
-    formData.pickupDetail.trim() &&
     formData.receiverName.trim() &&
     formData.receiverPhone.trim() &&
     formData.deliveryLocation.trim() &&
