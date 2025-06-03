@@ -122,6 +122,9 @@ export default function PaymentPage() {
             <div className="address-search-wrapper large">
               <input name="pickupLocation" value={formData.pickupLocation} readOnly />
               <button type="button" onClick={() => setOpenPostcodePickup(true)}>주소 검색</button>
+            <span className="label-text">세부 장소<span className="asterisk">*</span></span>
+            <input name="receiverPhone" value={formData.receiverPhone} onChange={handleChange} />
+
             </div>
             {openPostcodePickup && (
               <>
@@ -155,6 +158,9 @@ export default function PaymentPage() {
             <div className="address-search-wrapper large">
               <input name="deliveryLocation" value={formData.deliveryLocation} readOnly />
               <button type="button" onClick={() => setOpenPostcodeDelivery(true)}>주소 검색</button>
+            <span className="label-text">세부 장소<span className="asterisk">*</span></span>
+            <input name="receiverPhone" value={formData.receiverPhone} onChange={handleChange} />
+
             </div>
             {openPostcodeDelivery && (
               <>
