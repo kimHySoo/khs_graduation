@@ -13,6 +13,7 @@ export default function PaymentPage() {
     clientName: '',
     clientPhone: '',
     pickupLocation: '',
+    pickupDetail: '',
     receiverName: '',
     receiverPhone: '',
     deliveryLocation: '',
@@ -48,7 +49,7 @@ export default function PaymentPage() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handlePayClick = (method) => {
@@ -72,12 +73,12 @@ export default function PaymentPage() {
   };
 
   const handleCompletePickup = (data) => {
-    setFormData(prev => ({ ...prev, pickupLocation: data.address }));
+    setFormData((prev) => ({ ...prev, pickupLocation: data.address }));
     setOpenPostcodePickup(false);
   };
 
   const handleCompleteDelivery = (data) => {
-    setFormData(prev => ({ ...prev, deliveryLocation: data.address }));
+    setFormData((prev) => ({ ...prev, deliveryLocation: data.address }));
     setOpenPostcodeDelivery(false);
   };
 
@@ -85,6 +86,7 @@ export default function PaymentPage() {
     formData.clientName.trim() &&
     formData.clientPhone.trim() &&
     formData.pickupLocation.trim() &&
+    formData.pickupDetail.trim() &&
     formData.receiverName.trim() &&
     formData.receiverPhone.trim() &&
     formData.deliveryLocation.trim() &&
@@ -110,34 +112,73 @@ export default function PaymentPage() {
         <div className="form-box">
           <h2 className="section-title">의뢰인 정보</h2>
           <label>
-            <span className="label-text">의뢰인<span className="asterisk">*</span></span>
+            <span className="label-text">
+              의뢰인<span className="asterisk">*</span>
+            </span>
             <input name="clientName" value={formData.clientName} readOnly />
           </label>
           <label>
-            <span className="label-text">의뢰인 연락처<span className="asterisk">*</span></span>
+            <span className="label-text">
+              의뢰인 연락처<span className="asterisk">*</span>
+            </span>
             <input name="clientPhone" value={formData.clientPhone} readOnly />
           </label>
-          <label>
-            <span className="label-text">수령 장소<span className="asterisk">*</span></span>
-            <div className="address-search-wrapper large">
-              <input name="pickupLocation" value={formData.pickupLocation} readOnly />
-              <button type="button" onClick={() => setOpenPostcodePickup(true)}>주소 검색</button>
-            <span className="label-text">세부 장소<span className="asterisk">*</span></span>
-            <input name="receiverPhone" value={formData.receiverPhone} onChange={handleChange} />
 
+          {/* 수령 장소 */}
+          <label>
+            <span className="label-text">
+              수령 장소<span className="asterisk">*</span>
+            </span>
+            <div className="address-search-wrapper large">
+              <input
+                name="pickupLocation"
+                value={formData.pickupLocation}
+                readOnly
+              />
+              <button
+                type="button"
+                onClick={() => setOpenPostcodePickup(true)}
+              >
+                주소 검색
+              </button>
             </div>
             {openPostcodePickup && (
               <>
-                <div className="address-modal-backdrop" onClick={() => setOpenPostcodePickup(false)}></div>
+                <div
+                  className="address-modal-backdrop"
+                  onClick={() => setOpenPostcodePickup(false)}
+                />
                 <div className="react-daum-postcode-wrapper">
-                  <DaumPostcode onComplete={handleCompletePickup} autoClose />
+                  <DaumPostcode
+                    onComplete={handleCompletePickup}
+                    autoClose
+                  />
                 </div>
               </>
             )}
           </label>
+
+          {/* 세부 장소 (수령) */}
+          <label>
+            <span className="label-text">
+              세부 장소<span className="asterisk">*</span>
+            </span>
+            <input
+              name="pickupDetail"
+              value={formData.pickupDetail}
+              onChange={handleChange}
+              placeholder="예: 건물명, 동호수 등"
+            />
+          </label>
+
           <label>
             <span className="label-text">수령 시간</span>
-            <input name="pickupTime" value={formData.pickupTime} onChange={handleChange} placeholder="(예: 2025-06-01T14:30)" />
+            <input
+              name="pickupTime"
+              value={formData.pickupTime}
+              onChange={handleChange}
+              placeholder="(예: 2025-06-01T14:30)"
+            />
           </label>
           <label>
             <span className="label-text">유의 사항</span>
@@ -146,27 +187,53 @@ export default function PaymentPage() {
 
           <h2 className="section-title">인수인 정보</h2>
           <label>
-            <span className="label-text">인수인<span className="asterisk">*</span></span>
-            <input name="receiverName" value={formData.receiverName} onChange={handleChange} />
+            <span className="label-text">
+              인수인<span className="asterisk">*</span>
+            </span>
+            <input
+              name="receiverName"
+              value={formData.receiverName}
+              onChange={handleChange}
+            />
           </label>
           <label>
-            <span className="label-text">인수인 연락처<span className="asterisk">*</span></span>
-            <input name="receiverPhone" value={formData.receiverPhone} onChange={handleChange} />
+            <span className="label-text">
+              인수인 연락처<span className="asterisk">*</span>
+            </span>
+            <input
+              name="receiverPhone"
+              value={formData.receiverPhone}
+              onChange={handleChange}
+            />
           </label>
           <label>
-            <span className="label-text">배달 장소<span className="asterisk">*</span></span>
+            <span className="label-text">
+              배달 장소<span className="asterisk">*</span>
+            </span>
             <div className="address-search-wrapper large">
-              <input name="deliveryLocation" value={formData.deliveryLocation} readOnly />
-              <button type="button" onClick={() => setOpenPostcodeDelivery(true)}>주소 검색</button>
-            <span className="label-text">세부 장소<span className="asterisk">*</span></span>
-            <input name="receiverPhone" value={formData.receiverPhone} onChange={handleChange} />
-
+              <input
+                name="deliveryLocation"
+                value={formData.deliveryLocation}
+                readOnly
+              />
+              <button
+                type="button"
+                onClick={() => setOpenPostcodeDelivery(true)}
+              >
+                주소 검색
+              </button>
             </div>
             {openPostcodeDelivery && (
               <>
-                <div className="address-modal-backdrop" onClick={() => setOpenPostcodeDelivery(false)}></div>
+                <div
+                  className="address-modal-backdrop"
+                  onClick={() => setOpenPostcodeDelivery(false)}
+                />
                 <div className="react-daum-postcode-wrapper">
-                  <DaumPostcode onComplete={handleCompleteDelivery} autoClose />
+                  <DaumPostcode
+                    onComplete={handleCompleteDelivery}
+                    autoClose
+                  />
                 </div>
               </>
             )}
@@ -175,42 +242,86 @@ export default function PaymentPage() {
 
         <div className="form-box">
           <h2 className="section-title">물품 정보</h2>
-          <p className="warning">실버로드는 실버 근로자를 위하여 물품 5kg 한도로 접수 가능합니다.</p>
+          <p className="warning">
+            실버로드는 실버 근로자를 위하여 물품 5kg 한도로 접수 가능합니다.
+          </p>
           <label>
-            <span className="label-text">물품 종류<span className="asterisk">*</span></span>
-            <input name="itemType" value={formData.itemType} onChange={handleChange} />
+            <span className="label-text">
+              물품 종류<span className="asterisk">*</span>
+            </span>
+            <input
+              name="itemType"
+              value={formData.itemType}
+              onChange={handleChange}
+            />
           </label>
           <label>
-            <span className="label-text">물품명<span className="asterisk">*</span></span>
-            <input name="itemName" value={formData.itemName} onChange={handleChange} />
+            <span className="label-text">
+              물품명<span className="asterisk">*</span>
+            </span>
+            <input
+              name="itemName"
+              value={formData.itemName}
+              onChange={handleChange}
+            />
           </label>
           <label>
-            <span className="label-text">물품 액면가<span className="asterisk">*</span></span>
-            <input name="itemDeclaredValue" value={formData.itemDeclaredValue} onChange={handleChange} />
+            <span className="label-text">
+              물품 액면가<span className="asterisk">*</span>
+            </span>
+            <input
+              name="itemDeclaredValue"
+              value={formData.itemDeclaredValue}
+              onChange={handleChange}
+            />
           </label>
           <label>
-            <span className="label-text">물품 무게<span className="asterisk">*</span></span>
-            <input name="itemWeight" value={formData.itemWeight} onChange={handleChange} />
+            <span className="label-text">
+              물품 무게<span className="asterisk">*</span>
+            </span>
+            <input
+              name="itemWeight"
+              value={formData.itemWeight}
+              onChange={handleChange}
+            />
           </label>
 
           <div className="payment-footer-area">
             <div className="footer-text">위 주문의 총 접수 금액입니다.</div>
 
             <div className="payment-methods">
-              <button className="pay-button" onClick={() => handlePayClick('네이버페이')}>
-                <div className="pay-logo" style={{ backgroundColor: '#00DE5A' }}>
+              <button
+                className="pay-button"
+                onClick={() => handlePayClick('네이버페이')}
+              >
+                <div
+                  className="pay-logo"
+                  style={{ backgroundColor: '#00DE5A' }}
+                >
                   <img src="/images/cus/naver.svg" alt="naver" />
                 </div>
                 네이버페이
               </button>
-              <button className="pay-button" onClick={() => handlePayClick('카카오페이')}>
-                <div className="pay-logo" style={{ backgroundColor: '#FFEB00' }}>
+              <button
+                className="pay-button"
+                onClick={() => handlePayClick('카카오페이')}
+              >
+                <div
+                  className="pay-logo"
+                  style={{ backgroundColor: '#FFEB00' }}
+                >
                   <img src="/images/cus/kakao.svg" alt="kakao" />
                 </div>
                 카카오페이
               </button>
-              <button className="pay-button" onClick={() => handlePayClick('토스페이')}>
-                <div className="pay-logo" style={{ backgroundColor: '#E6F9FF' }}>
+              <button
+                className="pay-button"
+                onClick={() => handlePayClick('토스페이')}
+              >
+                <div
+                  className="pay-logo"
+                  style={{ backgroundColor: '#E6F9FF' }}
+                >
                   <img src="/images/cus/toss.png" alt="toss" />
                 </div>
                 토스페이
@@ -219,10 +330,16 @@ export default function PaymentPage() {
 
             <div className="total-area">
               <div className="total-label">결제 금액</div>
-              <div className="total-amount">{totalAmount.toLocaleString()}원</div>
+              <div className="total-amount">
+                {totalAmount.toLocaleString()}원
+              </div>
             </div>
 
-            <button className="submit-button" disabled={!isFormValid} onClick={handleSubmit}>
+            <button
+              className="submit-button"
+              disabled={!isFormValid}
+              onClick={handleSubmit}
+            >
               접수 하기
             </button>
           </div>
